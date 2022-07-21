@@ -7,50 +7,46 @@ import java.sql.Timestamp;
 @Table(name = "log")
 public class GarageLog {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
-    @Column(name = "car_id")
-    private int carId;
-    @Column(name = "lot_id")
-    private int lotId;
-    @Column(name = "in_date")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Integer id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "car_id")
+    private Car car;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "lot_id")
+    private ParkingLot lot;
+
+    @Column(name = "in_date", nullable = false)
     private Timestamp inDate;
+
     @Column(name = "out_date")
     private Timestamp outDate;
 
-    public GarageLog() {
-    }
-
-    public GarageLog(int id, int carId, int lotId, Timestamp inDate, Timestamp outDate) {
-        this.id = id;
-        this.carId = carId;
-        this.lotId = lotId;
-        this.inDate = inDate;
-        this.outDate = outDate;
-    }
-
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public int getCarId() {
-        return carId;
+    public Car getCar() {
+        return car;
     }
 
-    public void setCarId(int carId) {
-        this.carId = carId;
+    public void setCar(Car car) {
+        this.car = car;
     }
 
-    public int getLotId() {
-        return lotId;
+    public ParkingLot getLot() {
+        return lot;
     }
 
-    public void setLotId(int lotId) {
-        this.lotId = lotId;
+    public void setLot(ParkingLot lot) {
+        this.lot = lot;
     }
 
     public Timestamp getInDate() {
@@ -73,8 +69,6 @@ public class GarageLog {
     public String toString() {
         return getClass().getSimpleName() + "(" +
                 "id = " + id + ", " +
-                "carId = " + carId + ", " +
-                "lotId = " + lotId + ", " +
                 "inDate = " + inDate + ", " +
                 "outDate = " + outDate + ")";
     }
