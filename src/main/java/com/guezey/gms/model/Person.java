@@ -1,44 +1,42 @@
 package com.guezey.gms.model;
 
+import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "person")
 public class Person {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Integer id;
+
     @Column(name = "first_name")
+    @Type(type = "org.hibernate.type.TextType")
     private String firstName;
+
     @Column(name = "last_name")
+    @Type(type = "org.hibernate.type.TextType")
     private String lastName;
+
     @Column(name = "email")
+    @Type(type = "org.hibernate.type.TextType")
     private String email;
+
     @Column(name = "gender")
+    @Type(type = "org.hibernate.type.TextType")
     private String gender;
-    @Column(name = "car_id")
-    private int carId;
+
     @Column(name = "phone")
+    @Type(type = "org.hibernate.type.TextType")
     private String phone;
 
-    public Person() {
-    }
-
-    public Person(int id, String firstName, String lastName, String email, String gender, int carId, String phone) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.gender = gender;
-        this.carId = carId;
-        this.phone = phone;
-    }
-
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -74,14 +72,6 @@ public class Person {
         this.gender = gender;
     }
 
-    public int getCarId() {
-        return carId;
-    }
-
-    public void setCarId(int carId) {
-        this.carId = carId;
-    }
-
     public String getPhone() {
         return phone;
     }
@@ -92,14 +82,12 @@ public class Person {
 
     @Override
     public String toString() {
-        return "Person{" +
-                "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
-                ", gender='" + gender + '\'' +
-                ", carId=" + carId +
-                ", phone='" + phone + '\'' +
-                '}';
+        return getClass().getSimpleName() + "(" +
+                "id = " + id + ", " +
+                "firstName = " + firstName + ", " +
+                "lastName = " + lastName + ", " +
+                "email = " + email + ", " +
+                "gender = " + gender + ", " +
+                "phone = " + phone + ")";
     }
 }

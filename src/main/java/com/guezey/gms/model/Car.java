@@ -1,42 +1,50 @@
 package com.guezey.gms.model;
 
+import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "car")
 public class Car {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Integer id;
+
     @Column(name = "make")
+    @Type(type = "org.hibernate.type.TextType")
     private String make;
+
     @Column(name = "model")
+    @Type(type = "org.hibernate.type.TextType")
     private String model;
+
     @Column(name = "year")
+    @Type(type = "org.hibernate.type.TextType")
     private String year;
-    @Column(name = "owner_id")
-    private int ownerId;
+
     @Column(name = "plate")
+    @Type(type = "org.hibernate.type.TextType")
     private String plate;
 
-    public Car(int id, String make, String model, String year, int ownerId, String plate) {
-        this.id = id;
-        this.make = make;
-        this.model = model;
-        this.year = year;
-        this.ownerId = ownerId;
-        this.plate = plate;
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "owner_id")
+    private Person owner;
+
+    public Person getOwner() {
+        return owner;
     }
 
-    public Car() {
-
+    public void setOwner(Person owner) {
+        this.owner = owner;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -64,14 +72,6 @@ public class Car {
         this.year = year;
     }
 
-    public int getOwnerId() {
-        return ownerId;
-    }
-
-    public void setOwnerId(int ownerId) {
-        this.ownerId = ownerId;
-    }
-
     public String getPlate() {
         return plate;
     }
@@ -87,8 +87,8 @@ public class Car {
                 ", make='" + make + '\'' +
                 ", model='" + model + '\'' +
                 ", year='" + year + '\'' +
-                ", ownerId=" + ownerId +
                 ", plate='" + plate + '\'' +
+                ", owner=" + owner +
                 '}';
     }
 }
