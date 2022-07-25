@@ -7,37 +7,37 @@ import javax.persistence.*;
 public class ParkingLot {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private Integer id;
     @Column(name = "floor")
-    private int floor;
+    private Integer floor;
     @Column(name = "block")
     private String block;
     @Column(name = "number")
-    private int number;
+    private Integer number;
 
     public ParkingLot() {
     }
 
-    public ParkingLot(int id, int floor, String block, int number) {
+    public ParkingLot(Integer id, Integer floor, String block, Integer number) {
         this.id = id;
         this.floor = floor;
         this.block = block;
         this.number = number;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public int getFloor() {
+    public Integer getFloor() {
         return floor;
     }
 
-    public void setFloor(int floor) {
+    public void setFloor(Integer floor) {
         this.floor = floor;
     }
 
@@ -49,11 +49,11 @@ public class ParkingLot {
         this.block = block;
     }
 
-    public int getNumber() {
+    public Integer getNumber() {
         return number;
     }
 
-    public void setNumber(int number) {
+    public void setNumber(Integer number) {
         this.number = number;
     }
 
