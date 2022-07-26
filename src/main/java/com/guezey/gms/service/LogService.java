@@ -1,8 +1,6 @@
 package com.guezey.gms.service;
 
-import com.guezey.gms.model.Car;
 import com.guezey.gms.model.GarageLog;
-import com.guezey.gms.model.ParkingLot;
 import com.guezey.gms.repo.CarRepository;
 import com.guezey.gms.repo.GarageLogRepository;
 import com.guezey.gms.repo.ParkingLotRepository;
@@ -41,10 +39,26 @@ public class LogService {
 
     public void createNewLog(String carId, String lotId, String inDate) {
         GarageLog newLog = new GarageLog();
-        newLog.setCar(carRepository.findCarById(Integer.parseInt(carId)));
+        newLog.setCar(carRepository.findById(Integer.parseInt(carId)));
         newLog.setLot(lotRepository.findParkingLotById(Integer.parseInt(lotId)));
         newLog.setInDate(Timestamp.from(Instant.parse(inDate)));
         newLog.setOutDate(null);
         logRepository.save(newLog);
+    }
+
+    public boolean addOutDateToLog(String carId, String outDate) {
+        if (verifyCarId(carId)) {
+            GarageLog log = logRepository.findByCar_IdAndOutDateIsNull(Integer.parseInt(carId));
+            if (log != null) {
+                log.setOutDate(Timestamp.from(Instant.parse(outDate)));
+                logRepository.save(log);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean verifyCarId(String carId) {
+        return carRepository.findById(Integer.parseInt(carId)) != null;
     }
 }

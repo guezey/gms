@@ -11,11 +11,11 @@ public class GarageLog {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "car_id")
     private Car car;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "lot_id")
     private ParkingLot lot;
 

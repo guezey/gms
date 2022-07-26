@@ -1,7 +1,6 @@
 package com.guezey.gms.service;
 
 import com.guezey.gms.model.Car;
-import com.guezey.gms.model.GarageLog;
 import com.guezey.gms.repo.GarageLogRepository;
 import org.springframework.stereotype.Service;
 
@@ -24,10 +23,7 @@ public class CarService {
 
     public List<Car> getCurrentCars() {
         List<Car> cars = new ArrayList<>();
-
-        for( GarageLog log : logRepository.findByOutDateIsNull()) {
-            cars.add(log.getCar());
-        }
+        logRepository.findByOutDateIsNull().forEach(garageLog -> cars.add(garageLog.getCar()));
         return cars;
     }
 
