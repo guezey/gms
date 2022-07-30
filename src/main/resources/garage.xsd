@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        xmlns:tns="http://guezey.com/gms/xml"
+        targetNamespace="http://guezey.com/gms/xml"
+        elementFormDefault="qualified">
+
+    <xs:element name="getCarRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="carModel" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="getCarResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="car" type="tns:car" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="car">
+        <xs:all>
+            <xs:element name="make" type="xs:string"/>
+            <xs:element name="model" type="xs:string"/>
+            <xs:element name="year" type="xs:string"/>
+            <xs:element name="plate">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:pattern value="[0-8][0-9][A-Z]{2,3}[0-9]{2,4}"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="owner">
+                <xs:complexType>
+                    <xs:all>
+                        <xs:element name="firstname" type="xs:string"/>
+                        <xs:element name="lastname" type="xs:string"/>
+                        <xs:element name="email" type="xs:string" minOccurs="0"/>
+                        <xs:element name="gender" type="xs:string" minOccurs="0"/>
+                        <xs:element name="phone">
+                            <xs:simpleType>
+                                <xs:restriction base="xs:string">
+                                    <xs:pattern value="[0-9]{10}"/>
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:element>
+                    </xs:all>
+                </xs:complexType>
+            </xs:element>
+        </xs:all>
+    </xs:complexType>
+
+    <xs:complexType name="lot">
+        <xs:all>
+            <xs:element name="floor" type="xs:integer"/>
+            <xs:element name="block" type="xs:string"/>
+            <xs:element name="number" type="xs:integer"/>
+        </xs:all>
+    </xs:complexType>
+
+    <xs:complexType name="log">
+        <xs:all>
+            <xs:element name="car" type="tns:car"/>
+            <xs:element name="lot" type="tns:lot"/>
+            <xs:element name="inDate" type="xs:dateTime"/>
+            <xs:element name="outDate" type="xs:dateTime" nillable="true"/>
+        </xs:all>
+    </xs:complexType>
+
+    
+
+</xs:schema>

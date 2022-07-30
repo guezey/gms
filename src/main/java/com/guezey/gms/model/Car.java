@@ -28,7 +28,7 @@ public class Car {
     @Type(type = "org.hibernate.type.TextType")
     private String plate;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "owner_id")
     private Person owner;
 

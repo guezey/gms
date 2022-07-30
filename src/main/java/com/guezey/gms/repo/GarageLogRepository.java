@@ -13,5 +13,6 @@ public interface GarageLogRepository extends JpaRepository<GarageLog, Integer> {
     List<GarageLog> findByLot_FloorAndOutDateIsNull(int floor);
     GarageLog findByLot(ParkingLot lot);
     GarageLog findByCar_IdAndOutDateIsNull(int carId);
+    GarageLog findFirstByCar_Model(String carModel);
 
 }
