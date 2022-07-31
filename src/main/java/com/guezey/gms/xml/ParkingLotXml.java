@@ -8,6 +8,8 @@
 
 package com.guezey.gms.xml;
 
+import com.guezey.gms.model.ParkingLot;
+
 import java.math.BigInteger;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -16,12 +18,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for lot complex type.
+ * <p>Java class for parkingLotXml complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="lot"&gt;
+ * &lt;complexType name="parkingLotXml"&gt;
  *   &lt;complexContent&gt;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;all&gt;
@@ -40,7 +42,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "lot", propOrder = {
 
 })
-public class Lot {
+public class ParkingLotXml {
 
     @XmlElement(required = true)
     protected BigInteger floor;
@@ -48,6 +50,15 @@ public class Lot {
     protected String block;
     @XmlElement(required = true)
     protected BigInteger number;
+
+    public ParkingLotXml(ParkingLot lot) {
+        this.floor = BigInteger.valueOf(lot.getFloor());
+        this.block = lot.getBlock();
+        this.number = BigInteger.valueOf(lot.getNumber());
+    }
+
+    public ParkingLotXml() {
+    }
 
     /**
      * Gets the value of the floor property.

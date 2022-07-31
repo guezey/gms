@@ -70,7 +70,7 @@ public class GarageLog {
         return "GarageLog{" +
                 "id=" + id +
                 ", car=" + car +
-                ", lot=" + lot +
+                ", parkingLotXml=" + lot +
                 ", inDate=" + inDate +
                 ", outDate=" + outDate +
                 '}';

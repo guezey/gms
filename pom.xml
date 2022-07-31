@@ -75,12 +75,12 @@
                         <goals>
                             <goal>xjc</goal>
                         </goals>
-                        <configuration>
-                            <outputDirectory>${basedir}/src/main/java-gen/</outputDirectory>
-                        </configuration>
                     </execution>
                 </executions>
                 <configuration>
+                    <xjbSources>
+                        <xjbSource>src/main/resources/global.xjb</xjbSource>
+                    </xjbSources>
                     <sources>
                         <source>src/main/resources/garage.xsd</source>
                     </sources>

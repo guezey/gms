@@ -4,22 +4,6 @@
         targetNamespace="http://guezey.com/gms/xml"
         elementFormDefault="qualified">
 
-    <xs:element name="getCarRequest">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element name="carModel" type="xs:string"/>
-            </xs:sequence>
-        </xs:complexType>
-    </xs:element>
-
-    <xs:element name="getCarResponse">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element name="car" type="tns:car" maxOccurs="unbounded"/>
-            </xs:sequence>
-        </xs:complexType>
-    </xs:element>
-
     <xs:element name="parkCarRequest">
         <xs:complexType>
             <xs:sequence>
@@ -32,8 +16,44 @@
 
     <xs:element name="parkCarResponse">
         <xs:complexType>
+            <xs:all>
+                <xs:element name="message" type="xs:string"/>
+                <xs:element name="log" type="tns:log" minOccurs="0"/>
+            </xs:all>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="registerCarRequest">
+        <xs:complexType>
             <xs:sequence>
-                <xs:element name="parkedCar" type="tns:car"/>
+                <xs:element name="carToRegister" type="tns:car"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="registerCarResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="message" type="xs:string"/>
+                <xs:element name="carToRegister" type="tns:car"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="removeCarRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="plate" type="xs:string"/>
+                <xs:element name="outDate" type="xs:dateTime"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="removeCarResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="message" type="xs:string"/>
+                <xs:element name="log" type="tns:log"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>

@@ -1,10 +1,5 @@
 package com.guezey.gms.endpoint;
 
-import com.guezey.gms.model.Car;
-import com.guezey.gms.model.GarageLog;
-import com.guezey.gms.repo.CarRepository;
-import com.guezey.gms.repo.GarageLogRepository;
-import com.guezey.gms.repo.ParkingLotRepository;
 import com.guezey.gms.service.SoapService;
 import com.guezey.gms.xml.*;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
@@ -12,9 +7,7 @@ import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 
-import java.sql.Timestamp;
-import java.time.Instant;
-import java.util.List;
+import javax.xml.datatype.DatatypeConfigurationException;
 
 @Endpoint
 public class GarageLogEndpoint {
@@ -25,22 +18,21 @@ public class GarageLogEndpoint {
         this.soapService = soapService;
     }
 
-    @PayloadRoot(namespace = NAMESPACE, localPart = "getCarRequest")
-    @ResponsePayload
-    public GetCarResponse getCar(@RequestPayload GetCarRequest request) {
-        GetCarResponse response = new GetCarResponse();
-        List<Car> cars = carRepository.findByModel(request.getCarModel());
-        cars.forEach(car -> {
-            com.guezey.gms.xml.Car newCar = new com.guezey.gms.xml.Car(car);
-            response.getCar().add(newCar);
-        });
-
-        return response;
-    }
-
     @PayloadRoot(namespace = NAMESPACE, localPart = "parkCarRequest")
     @ResponsePayload
-    public ParkCarResponse parkCar(@RequestPayload ParkCarRequest request) {
+    public ParkCarResponse parkCar(@RequestPayload ParkCarRequest request) throws DatatypeConfigurationException {
         return soapService.parkCar(request);
+    }
+
+    @PayloadRoot(namespace = NAMESPACE, localPart = "removeCarRequest")
+    @ResponsePayload
+    public RemoveCarResponse removeCar(@RequestPayload RemoveCarRequest request) throws DatatypeConfigurationException {
+        return soapService.removeCar(request);
+    }
+
+    @PayloadRoot(namespace = NAMESPACE, localPart = "registerCarRequest")
+    @ResponsePayload
+    public RegisterCarResponse registerCar(@RequestPayload RegisterCarRequest request) {
+        return soapService.registerCar(request);
     }
 }

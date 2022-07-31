@@ -46,9 +46,9 @@ public class LogService {
         logRepository.save(newLog);
     }
 
-    public boolean addOutDateToLog(String carId, String outDate) {
-        if (verifyCarId(carId)) {
-            GarageLog log = logRepository.findByCar_IdAndOutDateIsNull(Integer.parseInt(carId));
+    public boolean addOutDateToLog(String carPlate, String outDate) {
+        if (verifyCarId(carPlate)) {
+            GarageLog log = logRepository.findByCar_PlateAndOutDateIsNull(carPlate);
             if (log != null) {
                 log.setOutDate(Timestamp.from(Instant.parse(outDate)));
                 logRepository.save(log);

@@ -12,7 +12,7 @@ public interface GarageLogRepository extends JpaRepository<GarageLog, Integer> {
     List<GarageLog> findByInDateIsAfterAndInDateIsBefore(Timestamp t1, Timestamp t2);
     List<GarageLog> findByLot_FloorAndOutDateIsNull(int floor);
     GarageLog findByLot(ParkingLot lot);
-    GarageLog findByCar_IdAndOutDateIsNull(int carId);
+    GarageLog findByCar_PlateAndOutDateIsNull(String carPlate);
     GarageLog findFirstByCar_Model(String carModel);
 
 }

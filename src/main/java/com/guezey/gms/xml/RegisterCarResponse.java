@@ -24,10 +24,10 @@ import javax.xml.bind.annotation.XmlType;
  * &lt;complexType&gt;
  *   &lt;complexContent&gt;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
- *       &lt;all&gt;
+ *       &lt;sequence&gt;
  *         &lt;element name="message" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
- *         &lt;element name="log" type="{http://guezey.com/gms/xml}log" minOccurs="0"/&gt;
- *       &lt;/all&gt;
+ *         &lt;element name="carToRegister" type="{http://guezey.com/gms/xml}car"/&gt;
+ *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
@@ -37,14 +37,16 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-
+    "message",
+    "carToRegister"
 })
-@XmlRootElement(name = "parkCarResponse")
-public class ParkCarResponse {
+@XmlRootElement(name = "registerCarResponse")
+public class RegisterCarResponse {
 
     @XmlElement(required = true)
     protected String message;
-    protected GarageLogXml log;
+    @XmlElement(required = true)
+    protected CarXml carToRegister;
 
     /**
      * Gets the value of the message property.
@@ -71,27 +73,27 @@ public class ParkCarResponse {
     }
 
     /**
-     * Gets the value of the log property.
+     * Gets the value of the carToRegister property.
      * 
      * @return
      *     possible object is
-     *     {@link GarageLogXml }
+     *     {@link CarXml }
      *     
      */
-    public GarageLogXml getLog() {
-        return log;
+    public CarXml getCarToRegister() {
+        return carToRegister;
     }
 
     /**
-     * Sets the value of the log property.
+     * Sets the value of the carToRegister property.
      * 
      * @param value
      *     allowed object is
-     *     {@link GarageLogXml }
+     *     {@link CarXml }
      *     
      */
-    public void setLog(GarageLogXml value) {
-        this.log = value;
+    public void setCarToRegister(CarXml value) {
+        this.carToRegister = value;
     }
 
 }
