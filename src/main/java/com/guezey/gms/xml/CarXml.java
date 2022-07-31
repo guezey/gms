@@ -8,6 +8,9 @@
 
 package com.guezey.gms.xml;
 
+import com.guezey.gms.model.Car;
+import com.guezey.gms.model.Person;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -67,7 +70,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "car", propOrder = {
 
 })
-public class Car {
+public class CarXml {
 
     @XmlElement(required = true)
     protected String make;
@@ -78,7 +81,18 @@ public class Car {
     @XmlElement(required = true)
     protected String plate;
     @XmlElement(required = true)
-    protected Car.Owner owner;
+    protected CarXml.Owner owner;
+
+    public CarXml() {
+    }
+
+    public CarXml(Car car) {
+        this.make = car.getMake();
+        this.model = car.getModel();
+        this.year = car.getYear();
+        this.plate = car.getPlate();
+        this.owner = new Owner(car.getOwner());
+    }
 
     /**
      * Gets the value of the make property.
@@ -181,10 +195,10 @@ public class Car {
      * 
      * @return
      *     possible object is
-     *     {@link Car.Owner }
+     *     {@link CarXml.Owner }
      *     
      */
-    public Car.Owner getOwner() {
+    public CarXml.Owner getOwner() {
         return owner;
     }
 
@@ -193,10 +207,10 @@ public class Car {
      * 
      * @param value
      *     allowed object is
-     *     {@link Car.Owner }
+     *     {@link CarXml.Owner }
      *     
      */
-    public void setOwner(Car.Owner value) {
+    public void setOwner(CarXml.Owner value) {
         this.owner = value;
     }
 
@@ -244,6 +258,17 @@ public class Car {
         protected String gender;
         @XmlElement(required = true)
         protected String phone;
+
+        public Owner() {
+        }
+
+        public Owner(Person person) {
+            this.firstname = person.getFirstName();
+            this.lastname = person.getLastName();
+            this.email = person.getEmail();
+            this.gender = person.getGender();
+            this.phone = person.getPhone();
+        }
 
         /**
          * Gets the value of the firstname property.

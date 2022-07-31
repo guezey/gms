@@ -37,11 +37,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Car }
+     * Create an instance of {@link CarXml }
      * 
      */
-    public Car createCar() {
-        return new Car();
+    public CarXml createCar() {
+        return new CarXml();
     }
 
     /**
@@ -77,11 +77,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Car.Owner }
+     * Create an instance of {@link CarXml.Owner }
      * 
      */
-    public Car.Owner createCarOwner() {
-        return new Car.Owner();
+    public CarXml.Owner createCarOwner() {
+        return new CarXml.Owner();
     }
 
 }

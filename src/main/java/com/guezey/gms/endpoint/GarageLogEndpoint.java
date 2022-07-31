@@ -1,24 +1,28 @@
 package com.guezey.gms.endpoint;
 
 import com.guezey.gms.model.Car;
+import com.guezey.gms.model.GarageLog;
 import com.guezey.gms.repo.CarRepository;
 import com.guezey.gms.repo.GarageLogRepository;
-import com.guezey.gms.xml.GetCarRequest;
-import com.guezey.gms.xml.GetCarResponse;
+import com.guezey.gms.repo.ParkingLotRepository;
+import com.guezey.gms.service.SoapService;
+import com.guezey.gms.xml.*;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.List;
 
 @Endpoint
 public class GarageLogEndpoint {
     private static final String NAMESPACE = "http://guezey.com/gms/xml";
-    private final CarRepository carRepository;
+    private final SoapService soapService;
 
-    public GarageLogEndpoint(CarRepository carRepository) {
-        this.carRepository = carRepository;
+    public GarageLogEndpoint(SoapService soapService) {
+        this.soapService = soapService;
     }
 
     @PayloadRoot(namespace = NAMESPACE, localPart = "getCarRequest")
@@ -27,18 +31,16 @@ public class GarageLogEndpoint {
         GetCarResponse response = new GetCarResponse();
         List<Car> cars = carRepository.findByModel(request.getCarModel());
         cars.forEach(car -> {
-            com.guezey.gms.xml.Car newCar = new com.guezey.gms.xml.Car();
-            newCar.setMake(car.getMake());
-            newCar.setModel(car.getModel());
-            newCar.setYear(car.getYear());
-            newCar.setPlate(car.getPlate());
-            newCar.setOwner(new com.guezey.gms.xml.Car.Owner());
-            newCar.getOwner().setFirstname(car.getOwner().getFirstName());
-            newCar.getOwner().setLastname(car.getOwner().getLastName());
-            newCar.getOwner().setPhone("1234567890");
+            com.guezey.gms.xml.Car newCar = new com.guezey.gms.xml.Car(car);
             response.getCar().add(newCar);
         });
 
         return response;
+    }
+
+    @PayloadRoot(namespace = NAMESPACE, localPart = "parkCarRequest")
+    @ResponsePayload
+    public ParkCarResponse parkCar(@RequestPayload ParkCarRequest request) {
+        return soapService.parkCar(request);
     }
 }

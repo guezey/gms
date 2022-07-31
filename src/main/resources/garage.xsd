@@ -20,6 +20,24 @@
         </xs:complexType>
     </xs:element>
 
+    <xs:element name="parkCarRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="carPlate" type="xs:string"/>
+                <xs:element name="parkingLot" type="tns:lot"/>
+                <xs:element name="inDate" type="xs:dateTime"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="parkCarResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="parkedCar" type="tns:car"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
     <xs:complexType name="car">
         <xs:all>
             <xs:element name="make" type="xs:string"/>
