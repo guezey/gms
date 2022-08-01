@@ -6,13 +6,15 @@
 //
 
 
-package com.guezey.gms.xml;
+package com.guezey.gms.xml.request;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.datatype.XMLGregorianCalendar;
 
 
 /**
@@ -25,8 +27,8 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent&gt;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
- *         &lt;element name="message" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
- *         &lt;element name="log" type="{http://guezey.com/gms/xml}log"/&gt;
+ *         &lt;element name="plate" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
+ *         &lt;element name="outDate" type="{http://www.w3.org/2001/XMLSchema}dateTime"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -37,63 +39,64 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "message",
-    "log"
+    "plate",
+    "outDate"
 })
-@XmlRootElement(name = "removeCarResponse")
-public class RemoveCarResponse {
+@XmlRootElement(name = "removeCarRequest")
+public class RemoveCarRequest {
 
     @XmlElement(required = true)
-    protected String message;
+    protected String plate;
     @XmlElement(required = true)
-    protected GarageLogXml log;
+    @XmlSchemaType(name = "dateTime")
+    protected XMLGregorianCalendar outDate;
 
     /**
-     * Gets the value of the message property.
+     * Gets the value of the plate property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getMessage() {
-        return message;
+    public String getPlate() {
+        return plate;
     }
 
     /**
-     * Sets the value of the message property.
+     * Sets the value of the plate property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setMessage(String value) {
-        this.message = value;
+    public void setPlate(String value) {
+        this.plate = value;
     }
 
     /**
-     * Gets the value of the log property.
+     * Gets the value of the outDate property.
      * 
      * @return
      *     possible object is
-     *     {@link GarageLogXml }
+     *     {@link XMLGregorianCalendar }
      *     
      */
-    public GarageLogXml getLog() {
-        return log;
+    public XMLGregorianCalendar getOutDate() {
+        return outDate;
     }
 
     /**
-     * Sets the value of the log property.
+     * Sets the value of the outDate property.
      * 
      * @param value
      *     allowed object is
-     *     {@link GarageLogXml }
+     *     {@link XMLGregorianCalendar }
      *     
      */
-    public void setLog(GarageLogXml value) {
-        this.log = value;
+    public void setOutDate(XMLGregorianCalendar value) {
+        this.outDate = value;
     }
 
 }

@@ -6,7 +6,9 @@
 //
 
 
-package com.guezey.gms.xml;
+package com.guezey.gms.xml.request;
+
+import com.guezey.gms.xml.ParkingLotXml;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -27,8 +29,9 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *   &lt;complexContent&gt;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
- *         &lt;element name="plate" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
- *         &lt;element name="outDate" type="{http://www.w3.org/2001/XMLSchema}dateTime"/&gt;
+ *         &lt;element name="carPlate" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
+ *         &lt;element name="parkingLot" type="{http://guezey.com/gms/xml}lot"/&gt;
+ *         &lt;element name="inDate" type="{http://www.w3.org/2001/XMLSchema}dateTime"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -39,64 +42,91 @@ import javax.xml.datatype.XMLGregorianCalendar;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "plate",
-    "outDate"
+    "carPlate",
+    "parkingLot",
+    "inDate"
 })
-@XmlRootElement(name = "removeCarRequest")
-public class RemoveCarRequest {
+@XmlRootElement(name = "parkCarRequest")
+public class ParkCarRequest {
 
     @XmlElement(required = true)
-    protected String plate;
+    protected String carPlate;
+    @XmlElement(required = true)
+    protected ParkingLotXml parkingLot;
     @XmlElement(required = true)
     @XmlSchemaType(name = "dateTime")
-    protected XMLGregorianCalendar outDate;
+    protected XMLGregorianCalendar inDate;
 
     /**
-     * Gets the value of the plate property.
+     * Gets the value of the carPlate property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getPlate() {
-        return plate;
+    public String getCarPlate() {
+        return carPlate;
     }
 
     /**
-     * Sets the value of the plate property.
+     * Sets the value of the carPlate property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setPlate(String value) {
-        this.plate = value;
+    public void setCarPlate(String value) {
+        this.carPlate = value;
     }
 
     /**
-     * Gets the value of the outDate property.
+     * Gets the value of the parkingLot property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link ParkingLotXml }
+     *     
+     */
+    public ParkingLotXml getParkingLot() {
+        return parkingLot;
+    }
+
+    /**
+     * Sets the value of the parkingLot property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link ParkingLotXml }
+     *     
+     */
+    public void setParkingLot(ParkingLotXml value) {
+        this.parkingLot = value;
+    }
+
+    /**
+     * Gets the value of the inDate property.
      * 
      * @return
      *     possible object is
      *     {@link XMLGregorianCalendar }
      *     
      */
-    public XMLGregorianCalendar getOutDate() {
-        return outDate;
+    public XMLGregorianCalendar getInDate() {
+        return inDate;
     }
 
     /**
-     * Sets the value of the outDate property.
+     * Sets the value of the inDate property.
      * 
      * @param value
      *     allowed object is
      *     {@link XMLGregorianCalendar }
      *     
      */
-    public void setOutDate(XMLGregorianCalendar value) {
-        this.outDate = value;
+    public void setInDate(XMLGregorianCalendar value) {
+        this.inDate = value;
     }
 
 }

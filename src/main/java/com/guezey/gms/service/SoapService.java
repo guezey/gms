@@ -8,13 +8,18 @@ import com.guezey.gms.repo.GarageLogRepository;
 import com.guezey.gms.repo.ParkingLotRepository;
 import com.guezey.gms.repo.PersonRepository;
 import com.guezey.gms.xml.*;
+import com.guezey.gms.xml.request.*;
 import org.springframework.stereotype.Service;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class SoapService {
@@ -104,6 +109,78 @@ public class SoapService {
         else {
             response.setMessage("A car with the same plate number already exists in the database.");
             response.setRegisteredCar(new CarXml(carRepository.findByPlate(request.getCarToRegister().getPlate())));
+        }
+
+        return response;
+    }
+
+    public ListLogsResponse listLogs(ListLogsRequest request) throws DatatypeConfigurationException{
+        ListLogsResponse response = new ListLogsResponse();
+        Timestamp start = Timestamp.valueOf(request.getDate().toString() + " 00:00:00"),
+                  end = new Timestamp(start.getTime() + 86400000);
+        List<GarageLog> logs;
+
+        switch (request.getLogType()) {
+            case "IN":
+                response.setMessage("List of entry logs of date " + request.getDate().toString());
+                if (request.getFloor() != null || !request.getFloor().equals("")) {
+                    logs = logRepository.findByInDateBetweenAndLot_Floor(start, end, Integer.parseInt(request.getFloor()));
+                }
+                else {
+                    logs = logRepository.findByInDateBetween(start, end);
+                }
+                break;
+            case "OUT":
+                response.setMessage("List of exit logs of date " + request.getDate().toString());
+                if (request.getFloor() != null || !request.getFloor().equals("")) {
+                    logs = logRepository.findByOutDateBetweenAndLot_Floor(start, end, Integer.parseInt(request.getFloor()));
+                }
+                else {
+                    logs = logRepository.findByOutDateBetween(start, end);
+                }
+                break;
+            case "BOTH":
+                response.setMessage("List of entry and exit logs of date " + request.getDate().toString());
+                if (request.getFloor() != null || !request.getFloor().equals("")) {
+                    logs = logRepository.findByInDateBetweenAndOutDateBetweenAndLot_Floor(start, end, start, end, Integer.parseInt(request.getFloor()));
+                }
+                else {
+                    logs = logRepository.findByInDateBetweenAndOutDateBetween(start, end, start, end);
+                }
+                break;
+            case "EITHER":
+                response.setMessage("List of entry or exit logs of date " + request.getDate().toString());
+                if (request.getFloor() != null || !request.getFloor().equals("")) {
+                    logs = logRepository.findByInDateBetweenOrOutDateBetweenAndLot_Floor(start, end, start, end, Integer.parseInt(request.getFloor()));
+                }
+                else {
+                    logs = logRepository.findByInDateBetweenOrOutDateBetween(start, end, start, end);
+                }
+                break;
+            default:
+                logs = new ArrayList<>();
+        }
+
+        if (request.getFloor() != null || !request.getFloor().equals(""))
+            response.setMessage(response.getMessage() + " and floor " + request.getFloor());
+
+        if (request.getResponseType() != null && request.getResponseType().equals("MINIMAL")) {
+            logs.forEach(log -> {
+                ListLogsResponse.LogMinimal logMinimal = new ListLogsResponse.LogMinimal();
+                logMinimal.setPlate(log.getCar().getPlate());
+                logMinimal.setLot(new ParkingLotXml(log.getLot()));
+                response.getLogMinimal().add(logMinimal);
+            });
+            response.setMessage(response.getMessage() + " in minimalistic mode");
+        }
+        else {
+            for (GarageLog log : logs) {
+                GarageLogXml logXml = new GarageLogXml(log);
+                logXml.setInDate(DatatypeFactory.newInstance().newXMLGregorianCalendar(log.getInDate().toLocalDateTime().toString()));
+                logXml.setOutDate(DatatypeFactory.newInstance().newXMLGregorianCalendar(log.getOutDate().toLocalDateTime().toString()));
+
+                response.getLog().add(logXml);
+            }
         }
 
         return response;

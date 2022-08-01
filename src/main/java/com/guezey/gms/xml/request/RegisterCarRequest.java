@@ -6,7 +6,9 @@
 //
 
 
-package com.guezey.gms.xml;
+package com.guezey.gms.xml.request;
+
+import com.guezey.gms.xml.CarXml;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;

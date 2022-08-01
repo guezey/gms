@@ -9,8 +9,11 @@ import org.springframework.ws.config.annotation.EnableWs;
 import org.springframework.ws.config.annotation.WsConfigurerAdapter;
 import org.springframework.ws.transport.http.MessageDispatcherServlet;
 import org.springframework.ws.wsdl.wsdl11.DefaultWsdl11Definition;
+import org.springframework.xml.validation.XmlValidator;
 import org.springframework.xml.xsd.SimpleXsdSchema;
 import org.springframework.xml.xsd.XsdSchema;
+import org.springframework.xml.xsd.XsdSchemaCollection;
+import org.springframework.xml.xsd.commons.CommonsXsdSchemaCollection;
 
 @EnableWs
 @Configuration
@@ -23,18 +26,22 @@ public class WebServiceConfig extends WsConfigurerAdapter {
         return new ServletRegistrationBean<>(servlet, "/ws/*");
     }
 
-    @Bean(name = "garage")
-    public DefaultWsdl11Definition defaultWsdl11Definition(XsdSchema garageSchema) {
+    @Bean(name = "schema")
+    public DefaultWsdl11Definition defaultWsdl11Definition(XsdSchemaCollection schemaCollection) {
         DefaultWsdl11Definition wsdl11Definition = new DefaultWsdl11Definition();
         wsdl11Definition.setPortTypeName("GaragePort");
         wsdl11Definition.setLocationUri("/ws");
-        wsdl11Definition.setTargetNamespace("http://guezey.com/gms/xml");
-        wsdl11Definition.setSchema(garageSchema);
+        wsdl11Definition.setTargetNamespace("http://guezey.com/gms/xml/request");
+        wsdl11Definition.setSchemaCollection(schemaCollection);
         return wsdl11Definition;
     }
 
     @Bean
-    public XsdSchema garageSchema() {
-        return new SimpleXsdSchema(new ClassPathResource("garage.xsd"));
+    public XsdSchemaCollection schemaCollection() {
+        CommonsXsdSchemaCollection commonsXsdSchemaCollection = new CommonsXsdSchemaCollection(
+                new ClassPathResource("garage.xsd"),
+                new ClassPathResource("garage-request.xsd"));
+        commonsXsdSchemaCollection.setInline(true);
+        return commonsXsdSchemaCollection;
     }
 }

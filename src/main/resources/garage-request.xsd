@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:obj="http://guezey.com/gms/xml"
+           targetNamespace="http://guezey.com/gms/xml/request"
+           elementFormDefault="qualified">
+    <xs:import namespace="http://guezey.com/gms/xml" schemaLocation="garage.xsd"/>
+
+
+    <xs:element name="parkCarRequest">
+        <xs:complexType>
+            <xs:all>
+                <xs:element name="carPlate" type="xs:string"/>
+                <xs:element name="parkingLot" type="obj:lot"/>
+                <xs:element name="inDate" type="xs:dateTime"/>
+            </xs:all>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="parkCarResponse">
+        <xs:complexType>
+            <xs:all>
+                <xs:element name="message" type="xs:string"/>
+                <xs:element name="log" type="obj:log" minOccurs="0"/>
+            </xs:all>
+        </xs:complexType>
+        </xs:element>
+
+        <xs:element name="registerCarRequest">
+        <xs:complexType>
+            <xs:all>
+                <xs:element name="carToRegister" type="obj:car"/>
+            </xs:all>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="registerCarResponse">
+        <xs:complexType>
+            <xs:all>
+                <xs:element name="message" type="xs:string"/>
+                <xs:element name="registeredCar" type="obj:car"/>
+            </xs:all>
+        </xs:complexType>
+        </xs:element>
+
+        <xs:element name="removeCarRequest">
+        <xs:complexType>
+            <xs:all>
+                <xs:element name="plate" type="xs:string"/>
+                <xs:element name="outDate" type="xs:dateTime"/>
+            </xs:all>
+        </xs:complexType>
+        </xs:element>
+
+        <xs:element name="removeCarResponse">
+        <xs:complexType>
+            <xs:all>
+                <xs:element name="message" type="xs:string"/>
+                <xs:element name="log" type="obj:log"/>
+            </xs:all>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="listLogsRequest">
+        <xs:complexType>
+            <xs:all>
+                <xs:element name="date" type="xs:date"/>
+                <xs:element name="floor" type="xs:string" minOccurs="0"/>
+                <xs:element name="logType">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="IN"/>
+                            <xs:enumeration value="OUT"/>
+                            <xs:enumeration value="BOTH"/>
+                            <xs:enumeration value="EITHER"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element name="responseType">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="MINIMAL"/>
+                            <xs:enumeration value="FULL"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+            </xs:all>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="listLogsResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="message" type="xs:string"/>
+                <xs:element name="log" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="entry" type="xs:dateTime"/>
+                            <xs:element name="exit" type="xs:dateTime"/>
+                            <xs:element name="plate" type="xs:string"/>
+                            <xs:element name="lot" type="obj:lot"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    
+</xs:schema>

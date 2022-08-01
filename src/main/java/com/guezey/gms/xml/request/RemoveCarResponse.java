@@ -6,7 +6,9 @@
 //
 
 
-package com.guezey.gms.xml;
+package com.guezey.gms.xml.request;
+
+import com.guezey.gms.xml.GarageLogXml;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -26,7 +28,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
  *         &lt;element name="message" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
- *         &lt;element name="registeredCar" type="{http://guezey.com/gms/xml}car"/&gt;
+ *         &lt;element name="log" type="{http://guezey.com/gms/xml}log"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -38,15 +40,15 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
     "message",
-    "registeredCar"
+    "log"
 })
-@XmlRootElement(name = "registerCarResponse")
-public class RegisterCarResponse {
+@XmlRootElement(name = "removeCarResponse")
+public class RemoveCarResponse {
 
     @XmlElement(required = true)
     protected String message;
     @XmlElement(required = true)
-    protected CarXml registeredCar;
+    protected GarageLogXml log;
 
     /**
      * Gets the value of the message property.
@@ -73,27 +75,27 @@ public class RegisterCarResponse {
     }
 
     /**
-     * Gets the value of the registeredCar property.
+     * Gets the value of the log property.
      * 
      * @return
      *     possible object is
-     *     {@link CarXml }
+     *     {@link GarageLogXml }
      *     
      */
-    public CarXml getRegisteredCar() {
-        return registeredCar;
+    public GarageLogXml getLog() {
+        return log;
     }
 
     /**
-     * Sets the value of the registeredCar property.
+     * Sets the value of the log property.
      * 
      * @param value
      *     allowed object is
-     *     {@link CarXml }
+     *     {@link GarageLogXml }
      *     
      */
-    public void setRegisteredCar(CarXml value) {
-        this.registeredCar = value;
+    public void setLog(GarageLogXml value) {
+        this.log = value;
     }
 
 }

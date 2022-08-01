@@ -1,7 +1,7 @@
 package com.guezey.gms.endpoint;
 
 import com.guezey.gms.service.SoapService;
-import com.guezey.gms.xml.*;
+import com.guezey.gms.xml.request.*;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
@@ -11,7 +11,7 @@ import javax.xml.datatype.DatatypeConfigurationException;
 
 @Endpoint
 public class GarageLogEndpoint {
-    private static final String NAMESPACE = "http://guezey.com/gms/xml";
+    private static final String NAMESPACE = "http://guezey.com/gms/xml/request";
     private final SoapService soapService;
 
     public GarageLogEndpoint(SoapService soapService) {
@@ -34,5 +34,11 @@ public class GarageLogEndpoint {
     @ResponsePayload
     public RegisterCarResponse registerCar(@RequestPayload RegisterCarRequest request) {
         return soapService.registerCar(request);
+    }
+
+    @PayloadRoot(namespace = NAMESPACE, localPart = "listLogsRequest")
+    @ResponsePayload
+    public ListLogsResponse listLogs(@RequestPayload ListLogsRequest request) throws DatatypeConfigurationException {
+        return soapService.listLogs(request);
     }
 }
