@@ -99,11 +99,11 @@ public class SoapService {
 
             carRepository.save(carToRegister);
             response.setMessage("Your car has been registered successfully.");
-            response.setCarToRegister(request.getCarToRegister());
+            response.setRegisteredCar(request.getCarToRegister());
         }
         else {
             response.setMessage("A car with the same plate number already exists in the database.");
-            response.setCarToRegister(new CarXml(carRepository.findByPlate(request.getCarToRegister().getPlate())));
+            response.setRegisteredCar(new CarXml(carRepository.findByPlate(request.getCarToRegister().getPlate())));
         }
 
         return response;

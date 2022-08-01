@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
  *         &lt;element name="message" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
- *         &lt;element name="carToRegister" type="{http://guezey.com/gms/xml}car"/&gt;
+ *         &lt;element name="registeredCar" type="{http://guezey.com/gms/xml}car"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -38,7 +38,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
     "message",
-    "carToRegister"
+    "registeredCar"
 })
 @XmlRootElement(name = "registerCarResponse")
 public class RegisterCarResponse {
@@ -46,7 +46,7 @@ public class RegisterCarResponse {
     @XmlElement(required = true)
     protected String message;
     @XmlElement(required = true)
-    protected CarXml carToRegister;
+    protected CarXml registeredCar;
 
     /**
      * Gets the value of the message property.
@@ -73,27 +73,27 @@ public class RegisterCarResponse {
     }
 
     /**
-     * Gets the value of the carToRegister property.
+     * Gets the value of the registeredCar property.
      * 
      * @return
      *     possible object is
      *     {@link CarXml }
      *     
      */
-    public CarXml getCarToRegister() {
-        return carToRegister;
+    public CarXml getRegisteredCar() {
+        return registeredCar;
     }
 
     /**
-     * Sets the value of the carToRegister property.
+     * Sets the value of the registeredCar property.
      * 
      * @param value
      *     allowed object is
      *     {@link CarXml }
      *     
      */
-    public void setCarToRegister(CarXml value) {
-        this.carToRegister = value;
+    public void setRegisteredCar(CarXml value) {
+        this.registeredCar = value;
     }
 
 }
