@@ -13,16 +13,15 @@ import org.springframework.stereotype.Service;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class SoapService {
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
     private final CarRepository carRepository;
     private final ParkingLotRepository lotRepository;
     private final GarageLogRepository logRepository;
@@ -49,7 +48,7 @@ public class SoapService {
             logRepository.save(log);
 
             GarageLogXml responseLog = new GarageLogXml(log);
-            String inDate = new SimpleDateFormat("yyy-MM-dd'T'HH:mm:ss").format(log.getInDate());
+            String inDate = DATE_FORMAT.format(log.getInDate());
             responseLog.setInDate(DatatypeFactory.newInstance().newXMLGregorianCalendar(inDate));
             response.setMessage("Your car is parked successfully.");
             response.setLog(responseLog);
@@ -70,9 +69,10 @@ public class SoapService {
             logRepository.save(log);
 
             GarageLogXml responseLog = new GarageLogXml(log);
-            String inDate = new SimpleDateFormat("yyy-MM-dd'T'HH:mm:ss").format(log.getInDate());
+            String inDate = DATE_FORMAT.format(log.getInDate());
+            String outDate = DATE_FORMAT.format(log.getOutDate());
             responseLog.setInDate(DatatypeFactory.newInstance().newXMLGregorianCalendar(inDate));
-            responseLog.setOutDate(request.getOutDate());
+            responseLog.setOutDate(DatatypeFactory.newInstance().newXMLGregorianCalendar(outDate));
             response.setMessage("The car is removed from the garage successfully.");
             response.setLog(responseLog);
         }
@@ -100,7 +100,7 @@ public class SoapService {
             person.setPhone(request.getCarToRegister().getOwner().getPhone());
 
             personRepository.save(person);
-            carToRegister.setOwner(personRepository.findLast());
+            carToRegister.setOwner(personRepository.findFirstByOrderByIdDesc());
 
             carRepository.save(carToRegister);
             response.setMessage("Your car has been registered successfully.");
@@ -120,67 +120,42 @@ public class SoapService {
                   end = new Timestamp(start.getTime() + 86400000);
         List<GarageLog> logs;
 
-        switch (request.getLogType()) {
+        switch (request.getType()) {
             case "IN":
                 response.setMessage("List of entry logs of date " + request.getDate().toString());
-                if (request.getFloor() != null || !request.getFloor().equals("")) {
-                    logs = logRepository.findByInDateBetweenAndLot_Floor(start, end, Integer.parseInt(request.getFloor()));
-                }
-                else {
-                    logs = logRepository.findByInDateBetween(start, end);
-                }
+                logs = logRepository.findByInDateBetweenOrderByInDate(start, end);
                 break;
+
             case "OUT":
                 response.setMessage("List of exit logs of date " + request.getDate().toString());
-                if (request.getFloor() != null || !request.getFloor().equals("")) {
-                    logs = logRepository.findByOutDateBetweenAndLot_Floor(start, end, Integer.parseInt(request.getFloor()));
-                }
-                else {
-                    logs = logRepository.findByOutDateBetween(start, end);
-                }
+                logs = logRepository.findByOutDateBetweenOrderByInDate(start, end);
                 break;
+
             case "BOTH":
                 response.setMessage("List of entry and exit logs of date " + request.getDate().toString());
-                if (request.getFloor() != null || !request.getFloor().equals("")) {
-                    logs = logRepository.findByInDateBetweenAndOutDateBetweenAndLot_Floor(start, end, start, end, Integer.parseInt(request.getFloor()));
-                }
-                else {
-                    logs = logRepository.findByInDateBetweenAndOutDateBetween(start, end, start, end);
-                }
+                logs = logRepository.findByInDateBetweenAndOutDateBetweenOrderByInDate(start, end, start, end);
                 break;
+
             case "EITHER":
                 response.setMessage("List of entry or exit logs of date " + request.getDate().toString());
-                if (request.getFloor() != null || !request.getFloor().equals("")) {
-                    logs = logRepository.findByInDateBetweenOrOutDateBetweenAndLot_Floor(start, end, start, end, Integer.parseInt(request.getFloor()));
-                }
-                else {
-                    logs = logRepository.findByInDateBetweenOrOutDateBetween(start, end, start, end);
-                }
+                logs = logRepository.findByInDateBetweenOrOutDateBetweenOrderByInDate(start, end, start, end);
                 break;
+
             default:
                 logs = new ArrayList<>();
         }
 
-        if (request.getFloor() != null || !request.getFloor().equals(""))
-            response.setMessage(response.getMessage() + " and floor " + request.getFloor());
-
-        if (request.getResponseType() != null && request.getResponseType().equals("MINIMAL")) {
-            logs.forEach(log -> {
-                ListLogsResponse.LogMinimal logMinimal = new ListLogsResponse.LogMinimal();
-                logMinimal.setPlate(log.getCar().getPlate());
-                logMinimal.setLot(new ParkingLotXml(log.getLot()));
-                response.getLogMinimal().add(logMinimal);
-            });
-            response.setMessage(response.getMessage() + " in minimalistic mode");
-        }
-        else {
-            for (GarageLog log : logs) {
-                GarageLogXml logXml = new GarageLogXml(log);
-                logXml.setInDate(DatatypeFactory.newInstance().newXMLGregorianCalendar(log.getInDate().toLocalDateTime().toString()));
-                logXml.setOutDate(DatatypeFactory.newInstance().newXMLGregorianCalendar(log.getOutDate().toLocalDateTime().toString()));
-
-                response.getLog().add(logXml);
+        for (GarageLog log : logs) {
+            ListLogsResponse.Log responseLog = new ListLogsResponse.Log();
+            String entry = DATE_FORMAT.format(log.getInDate());
+            responseLog.setEntry(DatatypeFactory.newInstance().newXMLGregorianCalendar(entry));
+            if (log.getOutDate() != null) {
+                String exit = DATE_FORMAT.format(log.getOutDate());
+                responseLog.setExit(DatatypeFactory.newInstance().newXMLGregorianCalendar(exit));
             }
+            responseLog.setPlate(log.getCar().getPlate());
+            responseLog.setLot(new ParkingLotXml(log.getLot()));
+            response.getLog().add(responseLog);
         }
 
         return response;

@@ -7,9 +7,9 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PersonRepository extends JpaRepository<Person, Integer> {
-    @Query(
-            value = "SELECT * FROM person ORDER BY id DESC LIMIT 1",
-            nativeQuery = true
-    )
-    Person findLast();
+//    @Query(
+//            value = "SELECT * FROM person ORDER BY id DESC LIMIT 1",
+//            nativeQuery = true
+//    )
+    Person findFirstByOrderByIdDesc();
 }

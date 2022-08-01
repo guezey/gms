@@ -29,7 +29,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *       &lt;all&gt;
  *         &lt;element name="date" type="{http://www.w3.org/2001/XMLSchema}date"/&gt;
  *         &lt;element name="floor" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/&gt;
- *         &lt;element name="logType"&gt;
+ *         &lt;element name="type"&gt;
  *           &lt;simpleType&gt;
  *             &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string"&gt;
  *               &lt;enumeration value="IN"/&gt;
@@ -65,10 +65,8 @@ public class ListLogsRequest {
     @XmlElement(required = true)
     @XmlSchemaType(name = "date")
     protected XMLGregorianCalendar date;
-    protected String floor;
     @XmlElement(required = true)
-    protected String logType;
-    protected String responseType;
+    protected String type;
 
     /**
      * Gets the value of the date property.
@@ -95,75 +93,28 @@ public class ListLogsRequest {
     }
 
     /**
-     * Gets the value of the floor property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Integer }
-     *     
-     */
-    public String getFloor() {
-        return floor;
-    }
-
-    /**
-     * Sets the value of the floor property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Integer }
-     *     
-     */
-    public void setFloor(String value) {
-        this.floor = value;
-    }
-
-    /**
-     * Gets the value of the logType property.
+     * Gets the value of the type property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getLogType() {
-        return logType;
+    public String getType() {
+        return type;
     }
 
     /**
-     * Sets the value of the logType property.
+     * Sets the value of the type property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setLogType(String value) {
-        this.logType = value;
+    public void setTType(String value) {
+        this.type = value;
     }
 
-    /**
-     * Gets the value of the responseType property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getResponseType() {
-        return responseType;
-    }
-
-    /**
-     * Sets the value of the responseType property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setResponseType(String value) {
-        this.responseType = value;
-    }
 
 }

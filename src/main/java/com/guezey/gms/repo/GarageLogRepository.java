@@ -13,12 +13,8 @@ public interface GarageLogRepository extends JpaRepository<GarageLog, Integer> {
     List<GarageLog> findByLot_FloorAndOutDateIsNull(int floor);
     GarageLog findByLot(ParkingLot lot);
     GarageLog findByCar_PlateAndOutDateIsNull(String carPlate);
-    List<GarageLog> findByInDateBetween(Timestamp start, Timestamp end);
-    List<GarageLog> findByOutDateBetween(Timestamp start, Timestamp end);
-    List<GarageLog> findByInDateBetweenOrOutDateBetween(Timestamp startIn, Timestamp endIn, Timestamp startOut, Timestamp endOut);
-    List<GarageLog> findByInDateBetweenAndOutDateBetween(Timestamp startIn, Timestamp endIn, Timestamp startOut, Timestamp endOut);
-    List<GarageLog> findByInDateBetweenAndLot_Floor(Timestamp start, Timestamp end, int floor);
-    List<GarageLog> findByOutDateBetweenAndLot_Floor(Timestamp start, Timestamp end, int floor);
-    List<GarageLog> findByInDateBetweenOrOutDateBetweenAndLot_Floor(Timestamp startIn, Timestamp endIn, Timestamp startOut, Timestamp endOut, int floor);
-    List<GarageLog> findByInDateBetweenAndOutDateBetweenAndLot_Floor(Timestamp startIn, Timestamp endIn, Timestamp startOut, Timestamp endOut, int floor);
+    List<GarageLog> findByInDateBetweenOrderByInDate(Timestamp start, Timestamp end);
+    List<GarageLog> findByOutDateBetweenOrderByInDate(Timestamp start, Timestamp end);
+    List<GarageLog> findByInDateBetweenOrOutDateBetweenOrderByInDate(Timestamp startIn, Timestamp endIn, Timestamp startOut, Timestamp endOut);
+    List<GarageLog> findByInDateBetweenAndOutDateBetweenOrderByInDate(Timestamp startIn, Timestamp endIn, Timestamp startOut, Timestamp endOut);
 }

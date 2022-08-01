@@ -64,22 +64,13 @@
         <xs:complexType>
             <xs:all>
                 <xs:element name="date" type="xs:date"/>
-                <xs:element name="floor" type="xs:string" minOccurs="0"/>
-                <xs:element name="logType">
+                <xs:element name="type">
                     <xs:simpleType>
                         <xs:restriction base="xs:string">
                             <xs:enumeration value="IN"/>
                             <xs:enumeration value="OUT"/>
                             <xs:enumeration value="BOTH"/>
                             <xs:enumeration value="EITHER"/>
-                        </xs:restriction>
-                    </xs:simpleType>
-                </xs:element>
-                <xs:element name="responseType">
-                    <xs:simpleType>
-                        <xs:restriction base="xs:string">
-                            <xs:enumeration value="MINIMAL"/>
-                            <xs:enumeration value="FULL"/>
                         </xs:restriction>
                     </xs:simpleType>
                 </xs:element>
@@ -95,7 +86,7 @@
                     <xs:complexType>
                         <xs:sequence>
                             <xs:element name="entry" type="xs:dateTime"/>
-                            <xs:element name="exit" type="xs:dateTime"/>
+                            <xs:element name="exit" type="xs:dateTime" nillable="true"/>
                             <xs:element name="plate" type="xs:string"/>
                             <xs:element name="lot" type="obj:lot"/>
                         </xs:sequence>

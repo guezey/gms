@@ -101,11 +101,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ListLogsResponse.LogMinimal }
+     * Create an instance of {@link ListLogsResponse.Log }
      * 
      */
-    public ListLogsResponse.LogMinimal createListLogsFullResponseLogMinimal() {
-        return new ListLogsResponse.LogMinimal();
+    public ListLogsResponse.Log createListLogsFullResponseLogMinimal() {
+        return new ListLogsResponse.Log();
     }
 
 }
