@@ -85,6 +85,7 @@ public class SoapService {
 
     public RegisterCarResponse registerCar(RegisterCarRequest request) {
         RegisterCarResponse response = new RegisterCarResponse();
+
         if (carRepository.findByPlate(request.getCarToRegister().getPlate()) == null) {
             Car carToRegister = new Car();
             Person person = new Person();
@@ -122,22 +123,22 @@ public class SoapService {
 
         switch (request.getType()) {
             case "IN":
-                response.setMessage("List of entry logs of date " + request.getDate().toString());
+                response.setMessage("Listing entry logs of date " + request.getDate().toString());
                 logs = logRepository.findByInDateBetweenOrderByInDate(start, end);
                 break;
 
             case "OUT":
-                response.setMessage("List of exit logs of date " + request.getDate().toString());
+                response.setMessage("Listing exit logs of date " + request.getDate().toString());
                 logs = logRepository.findByOutDateBetweenOrderByInDate(start, end);
                 break;
 
             case "BOTH":
-                response.setMessage("List of entry and exit logs of date " + request.getDate().toString());
+                response.setMessage("Listing entry and exit logs of date " + request.getDate().toString());
                 logs = logRepository.findByInDateBetweenAndOutDateBetweenOrderByInDate(start, end, start, end);
                 break;
 
             case "EITHER":
-                response.setMessage("List of entry or exit logs of date " + request.getDate().toString());
+                response.setMessage("Listing entry or exit logs of date " + request.getDate().toString());
                 logs = logRepository.findByInDateBetweenOrOutDateBetweenOrderByInDate(start, end, start, end);
                 break;
 
@@ -156,6 +157,30 @@ public class SoapService {
             responseLog.setPlate(log.getCar().getPlate());
             responseLog.setLot(new ParkingLotXml(log.getLot()));
             response.getLog().add(responseLog);
+        }
+
+        return response;
+    }
+
+    public LogsByCarResponse logsByCar(LogsByCarRequest request) throws DatatypeConfigurationException {
+        LogsByCarResponse response = new LogsByCarResponse();
+
+        if (logRepository.findByCar_PlateOrderByInDate(request.getPlate()) != null) {
+            for (GarageLog log : logRepository.findByCar_PlateOrderByInDate(request.getPlate())) {
+                LogsByCarResponse.Log responseLog = new LogsByCarResponse.Log();
+                String entry = DATE_FORMAT.format(log.getInDate());
+                responseLog.setEntry(DatatypeFactory.newInstance().newXMLGregorianCalendar(entry));
+                if (log.getOutDate() != null) {
+                    String exit = DATE_FORMAT.format(log.getOutDate());
+                    responseLog.setExit(DatatypeFactory.newInstance().newXMLGregorianCalendar(exit));
+                }
+                responseLog.setLot(new ParkingLotXml(log.getLot()));
+                response.getLog().add(responseLog);
+            }
+            response.setMessage("Listing logs of car with plate number " + request.getPlate());
+        }
+        else {
+            response.setMessage("No logs found for car with plate number " + request.getPlate());
         }
 
         return response;

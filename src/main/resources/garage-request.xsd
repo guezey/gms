@@ -95,5 +95,30 @@
             </xs:sequence>
         </xs:complexType>
     </xs:element>
+
+    <xs:element name="logsByCarRequest">
+        <xs:complexType>
+            <xs:all>
+                <xs:element name="plate" type="xs:string"/>
+            </xs:all>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="logsByCarResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="message" type="xs:string"/>
+                <xs:element name="log" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="entry" type="xs:dateTime"/>
+                            <xs:element name="exit" type="xs:dateTime"/>
+                            <xs:element name="lot" type="obj:lot"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
     
 </xs:schema>

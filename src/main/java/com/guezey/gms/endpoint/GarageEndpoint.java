@@ -10,11 +10,11 @@ import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 import javax.xml.datatype.DatatypeConfigurationException;
 
 @Endpoint
-public class GarageLogEndpoint {
+public class GarageEndpoint {
     private static final String NAMESPACE = "http://guezey.com/gms/xml/request";
     private final SoapService soapService;
 
-    public GarageLogEndpoint(SoapService soapService) {
+    public GarageEndpoint(SoapService soapService) {
         this.soapService = soapService;
     }
 
@@ -40,5 +40,11 @@ public class GarageLogEndpoint {
     @ResponsePayload
     public ListLogsResponse listLogs(@RequestPayload ListLogsRequest request) throws DatatypeConfigurationException {
         return soapService.listLogs(request);
+    }
+
+    @PayloadRoot(namespace = NAMESPACE, localPart = "logsByCarRequest")
+    @ResponsePayload
+    public LogsByCarResponse logsByCar(@RequestPayload LogsByCarRequest request) throws DatatypeConfigurationException {
+        return soapService.logsByCar(request);
     }
 }
