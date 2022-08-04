@@ -1,5 +1,6 @@
 package com.guezey.gms.endpoint;
 
+import com.guezey.gms.endpoint.exception.ClientFaultException;
 import com.guezey.gms.service.SoapService;
 import com.guezey.gms.xml.request.*;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
@@ -20,13 +21,13 @@ public class GarageEndpoint {
 
     @PayloadRoot(namespace = NAMESPACE, localPart = "parkCarRequest")
     @ResponsePayload
-    public ParkCarResponse parkCar(@RequestPayload ParkCarRequest request) throws DatatypeConfigurationException {
+    public ParkCarResponse parkCar(@RequestPayload ParkCarRequest request) throws DatatypeConfigurationException, ClientFaultException {
         return soapService.parkCar(request);
     }
 
     @PayloadRoot(namespace = NAMESPACE, localPart = "removeCarRequest")
     @ResponsePayload
-    public RemoveCarResponse removeCar(@RequestPayload RemoveCarRequest request) throws DatatypeConfigurationException {
+    public RemoveCarResponse removeCar(@RequestPayload RemoveCarRequest request) throws DatatypeConfigurationException, ClientFaultException {
         return soapService.removeCar(request);
     }
 
@@ -38,13 +39,13 @@ public class GarageEndpoint {
 
     @PayloadRoot(namespace = NAMESPACE, localPart = "listLogsRequest")
     @ResponsePayload
-    public ListLogsResponse listLogs(@RequestPayload ListLogsRequest request) throws DatatypeConfigurationException {
+    public ListLogsResponse listLogs(@RequestPayload ListLogsRequest request) throws DatatypeConfigurationException, ClientFaultException {
         return soapService.listLogs(request);
     }
 
     @PayloadRoot(namespace = NAMESPACE, localPart = "logsByCarRequest")
     @ResponsePayload
-    public LogsByCarResponse logsByCar(@RequestPayload LogsByCarRequest request) throws DatatypeConfigurationException {
+    public LogsByCarResponse logsByCar(@RequestPayload LogsByCarRequest request) throws DatatypeConfigurationException, IllegalArgumentException {
         return soapService.logsByCar(request);
     }
 }

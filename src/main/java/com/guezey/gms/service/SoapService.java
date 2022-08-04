@@ -1,5 +1,6 @@
 package com.guezey.gms.service;
 
+import com.guezey.gms.endpoint.exception.ClientFaultException;
 import com.guezey.gms.model.Car;
 import com.guezey.gms.model.GarageLog;
 import com.guezey.gms.model.Person;
@@ -7,7 +8,9 @@ import com.guezey.gms.repo.CarRepository;
 import com.guezey.gms.repo.GarageLogRepository;
 import com.guezey.gms.repo.ParkingLotRepository;
 import com.guezey.gms.repo.PersonRepository;
-import com.guezey.gms.xml.*;
+import com.guezey.gms.xml.CarXml;
+import com.guezey.gms.xml.GarageLogXml;
+import com.guezey.gms.xml.ParkingLotXml;
 import com.guezey.gms.xml.request.*;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +19,6 @@ import javax.xml.datatype.DatatypeFactory;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -34,33 +36,42 @@ public class SoapService {
         this.personRepository = personRepository;
     }
 
-    public ParkCarResponse parkCar(ParkCarRequest request) throws DatatypeConfigurationException {
+    public ParkCarResponse parkCar(ParkCarRequest request) throws DatatypeConfigurationException, ClientFaultException {
+        if (! request.isValid())
+            throw new ClientFaultException("Invalid request");
+
         ParkCarResponse response = new ParkCarResponse();
 
         if (carRepository.findByPlate(request.getCarPlate()) != null) {
-            GarageLog log = new GarageLog();
-            log.setCar(carRepository.findByPlate(request.getCarPlate()));
-            log.setLot(lotRepository.findByFloorAndNumberAndBlock(request.getParkingLot().getFloor().intValue(),
-                    request.getParkingLot().getNumber().intValue(),
-                    request.getParkingLot().getBlock()));
-            log.setInDate(Timestamp.from(Instant.parse(request.getInDate().toString() + ".00Z")));
-            log.setOutDate(null);
-            logRepository.save(log);
+            if (logRepository.findByCar_PlateAndOutDateIsNull(request.getCarPlate()) == null) {
+                GarageLog log = new GarageLog();
+                log.setCar(carRepository.findByPlate(request.getCarPlate()));
+                log.setLot(lotRepository.findByFloorAndNumberAndBlock(request.getParkingLot().getFloor().intValue(),
+                                                                      request.getParkingLot().getNumber().intValue(),
+                                                                      request.getParkingLot().getBlock()));
+                log.setInDate(Timestamp.from(Instant.parse(request.getInDate().toString() + ".00Z")));
+                log.setOutDate(null);
+                logRepository.save(log);
 
-            GarageLogXml responseLog = new GarageLogXml(log);
-            String inDate = DATE_FORMAT.format(log.getInDate());
-            responseLog.setInDate(DatatypeFactory.newInstance().newXMLGregorianCalendar(inDate));
-            response.setMessage("Your car is parked successfully.");
-            response.setLog(responseLog);
+                GarageLogXml responseLog = new GarageLogXml(log);
+                String inDate = DATE_FORMAT.format(log.getInDate());
+                responseLog.setInDate(DatatypeFactory.newInstance().newXMLGregorianCalendar(inDate));
+                response.setMessage("Car has been parked successfully.");
+                response.setLog(responseLog);
+            }
+            else
+                response.setMessage("Car with plate " + request.getCarPlate() + " is already in the garage.");
         }
-        else {
-            response.setMessage("Car is not found in the database. Register the car and try again.");
-        }
+        else
+            response.setMessage(request.getCarPlate() + " cannot be not found in the database. Register the car and try again.");
 
         return response;
     }
 
-    public RemoveCarResponse removeCar(RemoveCarRequest request) throws DatatypeConfigurationException {
+    public RemoveCarResponse removeCar(RemoveCarRequest request) throws DatatypeConfigurationException, ClientFaultException {
+        if (! request.isValid())
+            throw new ClientFaultException("Invalid request");
+
         RemoveCarResponse response = new RemoveCarResponse();
 
         if (logRepository.findByCar_PlateAndOutDateIsNull(request.getPlate()) != null) {
@@ -73,12 +84,12 @@ public class SoapService {
             String outDate = DATE_FORMAT.format(log.getOutDate());
             responseLog.setInDate(DatatypeFactory.newInstance().newXMLGregorianCalendar(inDate));
             responseLog.setOutDate(DatatypeFactory.newInstance().newXMLGregorianCalendar(outDate));
+
             response.setMessage("The car is removed from the garage successfully.");
             response.setLog(responseLog);
         }
-        else {
+        else
             response.setMessage("A car with plate number " + request.getPlate() + " is not present in the garage");
-        }
 
         return response;
     }
@@ -87,23 +98,22 @@ public class SoapService {
         RegisterCarResponse response = new RegisterCarResponse();
 
         if (carRepository.findByPlate(request.getCarToRegister().getPlate()) == null) {
-            Car carToRegister = new Car();
             Person person = new Person();
-            carToRegister.setMake(request.getCarToRegister().getMake());
-            carToRegister.setModel(request.getCarToRegister().getModel());
-            carToRegister.setYear(request.getCarToRegister().getYear());
-            carToRegister.setPlate(request.getCarToRegister().getPlate());
-
             person.setFirstName(request.getCarToRegister().getOwner().getFirstname());
             person.setLastName(request.getCarToRegister().getOwner().getLastname());
             person.setEmail(request.getCarToRegister().getOwner().getEmail());
             person.setGender(request.getCarToRegister().getOwner().getGender());
             person.setPhone(request.getCarToRegister().getOwner().getPhone());
-
             personRepository.save(person);
-            carToRegister.setOwner(personRepository.findFirstByOrderByIdDesc());
 
+            Car carToRegister = new Car();
+            carToRegister.setMake(request.getCarToRegister().getMake());
+            carToRegister.setModel(request.getCarToRegister().getModel());
+            carToRegister.setYear(request.getCarToRegister().getYear());
+            carToRegister.setPlate(request.getCarToRegister().getPlate());
+            carToRegister.setOwner(personRepository.findFirstByOrderByIdDesc());
             carRepository.save(carToRegister);
+
             response.setMessage("Your car has been registered successfully.");
             response.setRegisteredCar(request.getCarToRegister());
         }
@@ -115,7 +125,10 @@ public class SoapService {
         return response;
     }
 
-    public ListLogsResponse listLogs(ListLogsRequest request) throws DatatypeConfigurationException{
+    public ListLogsResponse listLogs(ListLogsRequest request) throws DatatypeConfigurationException, ClientFaultException {
+        if (request.getDate() == null || request.getDate().toString().length() < 10)
+            throw new ClientFaultException("Invalid date format. Format should be 'yyyy-MM-dd'");
+
         ListLogsResponse response = new ListLogsResponse();
         Timestamp start = Timestamp.valueOf(request.getDate().toString() + " 00:00:00"),
                   end = new Timestamp(start.getTime() + 86400000);
@@ -143,7 +156,7 @@ public class SoapService {
                 break;
 
             default:
-                logs = new ArrayList<>();
+                throw new ClientFaultException("Invalid type. Type must be one of these: 'IN', 'OUT', 'BOTH', 'EITHER'");
         }
 
         for (GarageLog log : logs) {
@@ -179,9 +192,8 @@ public class SoapService {
             }
             response.setMessage("Listing logs of car with plate number " + request.getPlate());
         }
-        else {
+        else
             response.setMessage("No logs found for car with plate number " + request.getPlate());
-        }
 
         return response;
     }

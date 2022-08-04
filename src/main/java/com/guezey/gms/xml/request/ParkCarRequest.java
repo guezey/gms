@@ -129,4 +129,9 @@ public class ParkCarRequest {
         this.inDate = value;
     }
 
+    public boolean isValid() {
+        return ! (this.getCarPlate() == null || this.getInDate() == null || this.getParkingLot().getBlock() == null ||
+                    this.getParkingLot().getFloor() == null || this.getParkingLot().getNumber() == null);
+    }
+
 }

@@ -99,4 +99,8 @@ public class RemoveCarRequest {
         this.outDate = value;
     }
 
+    public boolean isValid() {
+        return this.getOutDate() != null && this.getPlate() != null;
+    }
+
 }
